@@ -1,0 +1,27 @@
+Steps
+  Roll 
+  Choose what to do with the property you land on
+    pay rent if on a rival’s property
+      if unable to play rent, player must forfiet for game to continue
+    Nothing happens 
+      visiting jail
+      parking space 
+      you land on your own property 
+    pay tax
+    draw a card
+    collect 200 on go
+    go to jail
+    buy the property
+    pass or can’t pay, and an auction occurs 
+    >>> boils down to pay, get paid, buy, auction, go to jail, draw a card
+    >>> after every action a check is made to determine if the player is bankrupt or not
+  More decisions
+    trade
+    manage 
+    build 
+    mortgage 
+    post bail (if a player does not throw doubles by their third turn, 50 dollars)
+    end turn 
+  If a player rolled doubles, repeat the cycle from roll onwards
+
+
