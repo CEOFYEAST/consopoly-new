@@ -1,5 +1,0 @@
- - completely map out monopoly game loop (Done)
- - create a blank java project (Done)
-
- - slowly bring the old methods and classes into the new project, making sure to fix bugs / ensure readability and atomicity / properly define classes and variables / remove unnecessary & redundant code / maintain style / properly and efficiently replicate the game loop 
- - introduce further variables / methods / classes in order to fully replicate monopoly’s systems 
