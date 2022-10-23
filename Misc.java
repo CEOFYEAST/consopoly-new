@@ -78,7 +78,7 @@ public class Misc {
 
     for(String s: boardArr){
       System.out.println(s);
-      Game.tryWait(150);
+      Util.tryWait(150);
     }
 
     clear();

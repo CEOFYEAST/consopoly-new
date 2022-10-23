@@ -1,4 +1,5 @@
 import java.util.*;
+import java.lang.Math;
 
 /** 
 class representing an invididual player
@@ -21,7 +22,7 @@ public class Player{
   private ArrayList<Tile> tileProperty = new ArrayList<Tile>();
     //used for formatting player inventory 
       //2d array with ints representing owned tiles
-  private int ownedTileArray[][] =
+  private int tileArray[][] =
     {
       {0, 0, 0},
       {0, 0, 0},
@@ -36,8 +37,8 @@ public class Player{
 
 
   //constructor 
-  public Player(String icon){
-    this.icon = icon;
+  public Player(String iconName){
+    this.iconName = iconName;
   }
 
   
@@ -50,17 +51,17 @@ public class Player{
   }
   public void minusMoney(int money){
     this.money -= money;
-    System.out.println(icon + " has been deducted " + money + " dollars");
+    System.out.println(iconName + " has been deducted " + money + " dollars");
   }
   public void addMoney(int money){
     this.money += money;
-    System.out.println(icon + " has been given " + money + " dollars");
+    System.out.println(iconName + " has been given " + money + " dollars");
   }
-  public String getIcon(){
-    return icon;
+  public String getIconName(){
+    return iconName;
   }
-  public void setIcon(String newIcon){
-    icon = newIcon;
+  public void setIconName(String newIconName){
+    iconName = newIconName;
   }
   public int getPosition(){
     return position;
@@ -68,9 +69,9 @@ public class Player{
   public void addToPosition(int toAdd){
     int newPosition = position += toAdd;
     if(newPosition > 39){
-      position = (newPositon % 39) - 1;
+      position = (newPosition % 39) - 1;
     } else if(newPosition < 0){
-      position = math.abs(toAdd);
+      position = Math.abs(toAdd);
     } else {
       position = newPosition; 
     }
@@ -267,76 +268,76 @@ public class Player{
   public void setTileArray(){
     for(int i = 0; i < tileProperty.size(); i++){
         Tile currentTile = tileProperty.get(i);
-        int location = currentTile.getTileLocation();
-        switch(location){
+        int currentTilePosition = currentTile.getPosition();
+        switch(currentTilePosition){
           case 1:
-            tileArray[0][0] = location;
+            tileArray[0][0] = currentTilePosition;
             break;     
           case 3:
-            tileArray[0][1] = location;
+            tileArray[0][1] = currentTilePosition;
             break;            
           case 6:
-            tileArray[1][0] = location;
+            tileArray[1][0] = currentTilePosition;
             break;            
           case 8:
-            tileArray[1][1] = location;
+            tileArray[1][1] = currentTilePosition;
             break;
           case 9:
-            tileArray[1][2] = location;
+            tileArray[1][2] = currentTilePosition;
             break;
           case 11:
-            tileArray[2][0] = location;
+            tileArray[2][0] = currentTilePosition;
             break;
           case 13:
-            tileArray[2][1] = location;
+            tileArray[2][1] = currentTilePosition;
             break;
           case 14:
-            tileArray[2][2] = location;
+            tileArray[2][2] = currentTilePosition;
             break;
           case 16:
-            tileArray[3][0] = location;
+            tileArray[3][0] = currentTilePosition;
             break;
           case 18:
-            tileArray[3][1] = location;
+            tileArray[3][1] = currentTilePosition;
             break;
           case 19:
-            tileArray[3][2] = location;
+            tileArray[3][2] = currentTilePosition;
             break;
           case 21:
-            tileArray[4][0] = location;
+            tileArray[4][0] = currentTilePosition;
             break;
           case 23:
-            tileArray[4][1] = location;
+            tileArray[4][1] = currentTilePosition;
             break;
           case 24:
-            tileArray[4][2] = location;
+            tileArray[4][2] = currentTilePosition;
             break;
           case 26:
-            tileArray[5][0] = location;
+            tileArray[5][0] = currentTilePosition;
             break;
           case 27:
-            tileArray[5][1] = location;
+            tileArray[5][1] = currentTilePosition;
             break;
           case 29:
-            tileArray[5][2] = location;
+            tileArray[5][2] = currentTilePosition;
             break;
           case 31:
-            tileArray[6][0] = location;
+            tileArray[6][0] = currentTilePosition;
             break;
           case 32:
-            tileArray[6][1] = location;
+            tileArray[6][1] = currentTilePosition;
             break;
           case 34:
-            tileArray[6][2] = location;
+            tileArray[6][2] = currentTilePosition;
             break;
           case 37:
-            tileArray[7][0] = location;
+            tileArray[7][0] = currentTilePosition;
             break;
           case 39:
-            tileArray[7][1] = location;
+            tileArray[7][1] = currentTilePosition;
             break;
         }
       }
-      this.propertyZeros();
+      this.setPropertyZeros();
     }
 }

@@ -8,6 +8,8 @@ public class Tile{
   private int price;
     //sets tile type
       // 0 is property
+        //01 is a railroad
+        //02 is a utility
       // 1 is tax
       // 2 is draw card
       // 3 is jail
@@ -18,7 +20,6 @@ public class Tile{
   private int position;
   private boolean isMortgaged = false;
   private Player owner;
-  private int rent;
     //tile rent list used for determining rent with certain property #
   private int rentArr[];
     //tile property lists
@@ -29,13 +30,6 @@ public class Tile{
   private String innerText = "";
       //used for visual tile color
   private String tileColor = "\033[0;37m";
-      //used for houses
-  final String RED = "\033[0;31m            ";
-      //used for hotels
-  final String GREEN = "\033[0;32m            ";   
-      //used to clear the console
-  final String RESET = "\033[0m";  
-
   
   //constructor 
   public Tile(int position){
@@ -65,16 +59,37 @@ public class Tile{
   public boolean isMortgaged(){
     return isMortgaged;
   }
+  public int[] getRents(){
+    return rentArr;
+  }
     /**
     returns tile rent based on tile type and tile property count
     */
-  public int getRent(){
+  public int getRent(int... diceRoll){
+      //checks to see if tile is a utility in order to apply special rent properties 
+    if(diceRoll != null){
+      for(int roll: diceRoll){
+        int propertyCount = 0;
+        ArrayList<Tile> tileProperty = owner.getTilePropertyList();
+        for(int i = 0; i < tileProperty.size(); i++){
+          if(tileProperty.get(i).getType() == 02){
+            propertyCount += 1;
+          }
+      }
+        if(propertyCount == 1){
+          return(roll * 4);
+        }
+        else {
+          return(roll * 10);
+        }
+      }
+    }
       //checks to see if tile is a railroad in order to apply special rent properties
-    if(innerText.contains("road") || innerText.contains("line")){
+    if(type == 01){
       int propertyCount = 0;
       ArrayList<Tile> tileProperty = owner.getTilePropertyList();
       for(int i = 0; i < tileProperty.size(); i++){
-        if(tileProperty.get(i).innerText.contains("road") || innerText.contains("line")){
+        if(tileProperty.get(i).getType() == 01){
           propertyCount += 1;
         }
       }
@@ -129,6 +144,8 @@ public class Tile{
       case 5: 
         innerText = "Reading Railroad";
         price = 200;
+        rentArr = new int[]{50, 100, 150, 200};
+        type = 01;
         break;
       case 6: 
         innerText = "Oriental Avenue";
@@ -165,6 +182,7 @@ public class Tile{
       case 12: 
         innerText = "Electric Company";
         price = 150;
+        type = 02;
         break;
       case 13: 
         innerText = "States Avenue";
@@ -181,6 +199,8 @@ public class Tile{
       case 15: 
         innerText = "Pennsylvania Railroad";
         price = 200;
+        rentArr = new int[]{50, 100, 150, 200};
+        type = 01;
         break;
       case 16: 
         innerText = "St. James Place";
@@ -233,6 +253,8 @@ public class Tile{
       case 25: 
         innerText = "B. & O. Railroad";
         price = 200;
+        rentArr = new int[]{50, 100, 150, 200};
+        type= 01;
         break;
       case 26: 
         innerText = "Atlantic Avenue";
@@ -249,6 +271,7 @@ public class Tile{
       case 28: 
         innerText = "Water Works";
         price = 150;
+        type = 02;
         break;
       case 29: 
         innerText = "Marvin Gardens";
@@ -285,6 +308,8 @@ public class Tile{
       case 35: 
         innerText = "Short Line";
         price = 200;
+        rentArr = new int[]{50, 100, 150, 200};
+        type = 01;
         break;
       case 36: 
         innerText = "Chance";
@@ -340,19 +365,19 @@ public class Tile{
     //returns formatted tile
     String[] toReturn = new String[]{
       "┌────────────────┐", //0
-      "│ " + tileColor + topLine + topLineSpace + ANSI_RESET + " │", //1
-      "│ " + tileColor + midLine + midLineSpace + ANSI_RESET + " │", //2
-      "│ " + tileColor + bottomLine + bottomLineSpace + ANSI_RESET + " │", //3
+      "│ " + tileColor + topLine + topLineSpace + Misc.RESET + " │", //1
+      "│ " + tileColor + midLine + midLineSpace + Misc.RESET + " │", //2
+      "│ " + tileColor + bottomLine + bottomLineSpace + Misc.RESET + " │", //3
       "│────────────────│", //4
       "│                │", //5
       "│                │", //6
       "└────────────────┘"}; //7
 
-    String oneLine = "│       " + GREEN + "──" + RESET + "       │";
-    String twoLine =  "│    " + GREEN + "──    ──" + RESET + "    │";
-    String threeLine = "│   " + GREEN + "──  ──  ──" + RESET + "   │";
+    String oneLine = "│       " + Misc.GREEN + "──" + Misc.RESET + "       │";
+    String twoLine =  "│    " + Misc.GREEN + "──    ──" + Misc.RESET + "    │";
+    String threeLine = "│   " + Misc.GREEN + "──  ──  ──" + Misc.RESET + "   │";
 
-    String hotelLine = "│       " + GREEN + "──" + RESET + "       │";
+    String hotelLine = "│       " + Misc.GREEN + "──" + Misc.RESET + "       │";
 
     if(hotelList.size() > 0){
       toReturn[5] = hotelLine;
@@ -390,7 +415,7 @@ public class Tile{
   /**
   prints tile details
   */
-  public void toString(){
+  public void printTile(){
     int rentList[] = this.getRents();
     System.out.println(" - Tile Price " + price);
     if(innerText.contains("Electric") || innerText.contains("Water")){
