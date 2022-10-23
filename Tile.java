@@ -14,6 +14,8 @@ public class Tile{
       // 4 is collect (go and others)
       // 5 is nothing (parking space, visiting jail)
   private int type = 0;
+    //int representing tile's position on the board
+  private int position;
   private boolean isMortgaged = false;
   private Player owner;
   private int rent;
@@ -36,7 +38,8 @@ public class Tile{
 
   
   //constructor 
-  public Tile(int tileLocation){
+  public Tile(int position){
+    this.position = position;
   }
 
   
@@ -52,6 +55,9 @@ public class Tile{
   }
   public int getPrice(){
     return price;
+  }
+  public int getPosition(){
+    return position;
   }
   public int getType(){
     return type;
@@ -102,7 +108,7 @@ public class Tile{
         break;
       case 1: 
         innerText = "Mediterranean Avenue";
-        tileColor = "\033[38;2;135;82;62m";
+        tileColor = Misc.BROWN;
         price = 60;
         rentArr = new int[]{2, 10, 30, 90, 160, 250}; 
         break;
@@ -112,7 +118,7 @@ public class Tile{
         break;
       case 3: 
         innerText = "Baltic Avenue";
-        tileColor = "\033[38;2;135;82;62m";
+        tileColor = Misc.BROWN;
         price = 60;
         rentArr = new int[]{4, 20 ,60, 180, 320, 450};
         break;
@@ -126,7 +132,7 @@ public class Tile{
         break;
       case 6: 
         innerText = "Oriental Avenue";
-        tileColor = "\033[38;2;120;172;255m";
+        tileColor = Misc.LIGHT_BLUE;
         price = 100;
         rentArr = new int[]{6, 30, 90, 270, 400, 550};
         break;
@@ -136,13 +142,13 @@ public class Tile{
         break;
       case 8: 
         innerText = "Vermont Avenue";
-        tileColor = "\033[38;2;120;172;255m";
+        tileColor = Misc.LIGHT_BLUE;
         price = 100;
         rentArr = new int[]{6, 30, 90, 270, 400, 550};
         break;
       case 9: 
         innerText = "Connecticut Avenue";
-        tileColor = "\033[38;2;120;172;255m";
+        tileColor = Misc.LIGHT_BLUE;
         price = 120;
         rentArr = new int[]{8, 40, 100, 300, 450, 600};
         break;
@@ -152,7 +158,7 @@ public class Tile{
         break;
       case 11: 
         innerText = "St. Charles Place";
-        tileColor = "\033[38;2;255;153;240m";
+        tileColor = Misc.LIGHT_PINK;
         price = 140;
         rentArr = new int[]{10, 50, 150, 450, 625, 750};
         break;
@@ -162,13 +168,13 @@ public class Tile{
         break;
       case 13: 
         innerText = "States Avenue";
-        tileColor = "\033[38;2;255;153;240m";
+        tileColor = Misc.LIGHT_PINK;
         price = 140;
         rentArr = new int[]{10, 50, 150, 450, 625, 750};
         break;
       case 14: 
         innerText = "Virginia Avenue";
-        tileColor = "\033[38;2;255;153;240m";
+        tileColor = Misc.LIGHT_PINK;
         price = 160;
         rentArr = new int[]{12, 60, 180, 500, 700, 900};
         break;
@@ -178,7 +184,7 @@ public class Tile{
         break;
       case 16: 
         innerText = "St. James Place";
-        tileColor = "\033[38;2;225;153;0m";
+        tileColor = Misc.ORANGE;
         price = 180;
         rentArr = new int[]{14, 70, 200, 550, 750, 950};
         break;
@@ -188,13 +194,13 @@ public class Tile{
         break;
       case 18: 
         innerText = "Tennessee Avenue";
-        tileColor = "\033[38;2;225;153;0m";
+        tileColor = Misc.ORANGE;
         price = 180;
         rentArr = new int[]{14, 70, 200, 550, 750, 950};
         break;
       case 19: 
         innerText = "New York Avenue";
-        tileColor = "\033[38;2;225;153;0m";
+        tileColor = Misc.ORANGE;
         price = 200;
         rentArr = new int[]{16, 80, 220, 600, 800, 1000};
         break;
@@ -204,7 +210,7 @@ public class Tile{
         break;
       case 21: 
         innerText = "Kentucky Avenue";
-        tileColor = "\033[0;31m";
+        tileColor = Misc.RED;
         price = 220;
         rentArr = new int[]{18, 90, 250, 700, 875, 1050};
         break;
@@ -214,13 +220,13 @@ public class Tile{
         break;
       case 23: 
         innerText = "Indiana Avenue";
-        tileColor = "\033[0;31m";
+        tileColor = Misc.RED;
         price = 220;
         rentArr = new int[]{18, 90, 250, 700, 875, 1050};
         break;
       case 24: 
         innerText = "Illinois Avenue";
-        tileColor = "\033[0;31m";
+        tileColor = Misc.RED;
         price = 240;
         rentArr = new int[]{20, 100, 300, 750, 925, 1100};
         break;
@@ -230,13 +236,13 @@ public class Tile{
         break;
       case 26: 
         innerText = "Atlantic Avenue";
-        tileColor = "\033[0;33m";
+        tileColor = Misc.YELLOW;
         price = 260;
         rentArr = new int[]{22, 110, 330, 800, 975, 1150};
         break;
       case 27: 
         innerText = "Ventnor Avenue";
-        tileColor = "\033[0;33m";
+        tileColor = Misc.YELLOW;
         price = 260;
         rentArr = new int[]{22, 110, 330, 800, 975, 1150};
         break;
@@ -246,7 +252,7 @@ public class Tile{
         break;
       case 29: 
         innerText = "Marvin Gardens";
-        tileColor = "\033[0;33m";
+        tileColor = Misc.YELLOW;
         price = 280;
         rentArr = new int[]{24, 120, 360, 850, 1025, 1200};
         break;
@@ -256,13 +262,13 @@ public class Tile{
         break;
       case 31: 
         innerText = "Pacific Avenue";
-        tileColor = "\033[38;2;62;135;81m";
+        tileColor = Misc.FOREST_GREEN;
         price = 300;
         rentArr = new int[]{26, 130, 390, 900, 100, 1275};
         break;
       case 32: 
         innerText = "North Carolina Avenue";
-        tileColor = "\033[38;2;62;135;81m";
+        tileColor = Misc.FOREST_GREEN;
         price = 300;
         rentArr = new int[]{26, 130, 390, 900, 100, 1275};
         break;
@@ -272,7 +278,7 @@ public class Tile{
         break;
       case 34: 
         innerText = "Pennsylvania Avenue";
-        tileColor = "\033[38;2;62;135;81m";
+        tileColor = Misc.FOREST_GREEN;
         price = 320;
         rentArr = new int[]{28, 150, 450, 1000, 1200, 1400};
         break;
@@ -286,7 +292,7 @@ public class Tile{
         break;
       case 37: 
         innerText = "Park Place";
-        tileColor = "\033[38;2;72;0;255m";
+        tileColor = Misc.DARK_BLUE;
         price = 350;
         rentArr = new int[]{35, 175, 500, 1100, 1300, 1500};
         break;
@@ -296,7 +302,7 @@ public class Tile{
         break;
       case 39: 
         innerText = "Boardwalk";
-        tileColor = "\033[38;2;72;0;255m";
+        tileColor = Misc.DARK_BLUE;
         price = 400;
         rentArr = new int[]{50, 200, 600, 1400, 1700, 2000};
         break;
