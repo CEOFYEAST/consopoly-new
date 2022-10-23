@@ -30,10 +30,12 @@ public class Tile{
   private String innerText = "";
       //used for visual tile color
   private String tileColor = "\033[0;37m";
+
   
   //constructor 
   public Tile(int position){
     this.position = position;
+    this.setTile();
   }
 
   
@@ -47,6 +49,9 @@ public class Tile{
   public Player getOwner(){
     return owner;
   }
+  public void setOwner(Player owner){
+    this.owner = owner;
+  }
   public int getPrice(){
     return price;
   }
@@ -55,6 +60,12 @@ public class Tile{
   }
   public int getType(){
     return type;
+  }
+  public void addHouse(House toAdd){
+    houseList.add(toAdd);
+  }
+  public void addHotel(Hotel toAdd){
+    hotelList.add(toAdd);
   }
   public boolean isMortgaged(){
     return isMortgaged;
@@ -97,26 +108,25 @@ public class Tile{
     } 
       //if tile isn't a railroad or utility, sets rent based on tile property count and rentArr
     else{
-    int rents[] = this.getRents();
     if(hotelList.size() > 0){
-      return rents[5];
+      return rentArr[5];
     } else if(houseList.size() == 4){
-      return rents[4];
+      return rentArr[4];
     } else if(houseList.size() == 3){
-      return rents[3];
+      return rentArr[3];
     } else if(houseList.size() == 2){
-      return rents[2];
+      return rentArr[2];
     } else if(houseList.size() == 1){
-      return rents[1];
+      return rentArr[1];
     }
-    return rents[0];
+    return rentArr[0];
     }
   }
     /**
     sets all variables of a tile depending on its location on the board
     */
-  public void setTile(int tileLocation){
-    switch (tileLocation) {
+  public void setTile(){
+    switch (position) {
       case 0: 
         innerText = "Go -----> Collect 200 ";
         type = 4;
@@ -251,7 +261,7 @@ public class Tile{
         rentArr = new int[]{20, 100, 300, 750, 925, 1100};
         break;
       case 25: 
-        innerText = "B. & O. Railroad";
+        innerText = "B&O Railroad";
         price = 200;
         rentArr = new int[]{50, 100, 150, 200};
         type= 01;
@@ -344,6 +354,7 @@ public class Tile{
         spaceCount++;
       }
     }
+    //sets # of spaces before and after tile words for formatting
     String topLine;
     String midLine;
     String bottomLine = "";
@@ -356,28 +367,27 @@ public class Tile{
       bottomLine = innerText.substring(innerText.lastIndexOf(" ") + 1, innerText.length());
     } else {
       topLine = innerText.substring(0, innerText.indexOf(" "));
-     midLine = innerText.substring(innerText.indexOf(" ") + 1, innerText.length());
+      midLine = innerText.substring(innerText.indexOf(" ") + 1, innerText.length());
     }
-    String topLineSpace = Tile.spacer(topLine);
-    String midLineSpace = Tile.spacer(midLine);
-    String bottomLineSpace = Tile.spacer(bottomLine);
-    
+    String[] topLineSpaces = spacer(topLine);
+    String[] midLineSpaces = spacer(midLine);
+    String[] bottomLineSpaces = spacer(bottomLine);
     //returns formatted tile
     String[] toReturn = new String[]{
       "┌────────────────┐", //0
-      "│ " + tileColor + topLine + topLineSpace + Misc.RESET + " │", //1
-      "│ " + tileColor + midLine + midLineSpace + Misc.RESET + " │", //2
-      "│ " + tileColor + bottomLine + bottomLineSpace + Misc.RESET + " │", //3
+      "│ " + topLineSpaces[0] + tileColor + topLine + topLineSpaces[1] + Misc.RESET + " │", //1
+      "│ " + midLineSpaces[0] + tileColor + midLine + midLineSpaces[1] + Misc.RESET + " │", //2
+      "│ " + bottomLineSpaces[0] + tileColor + bottomLine + bottomLineSpaces[1] + Misc.RESET + " │", //3
       "│────────────────│", //4
       "│                │", //5
       "│                │", //6
       "└────────────────┘"}; //7
 
-    String oneLine = "│       " + Misc.GREEN + "──" + Misc.RESET + "       │";
-    String twoLine =  "│    " + Misc.GREEN + "──    ──" + Misc.RESET + "    │";
-    String threeLine = "│   " + Misc.GREEN + "──  ──  ──" + Misc.RESET + "   │";
+    String oneLine = "│       " + Misc.GREEN + "[]" + Misc.RESET + "       │";
+    String twoLine =  "│    " + Misc.GREEN + "[]    []" + Misc.RESET + "    │";
+    String threeLine = "│   " + Misc.GREEN + "[]  []  []" + Misc.RESET + "   │";
 
-    String hotelLine = "│       " + Misc.GREEN + "──" + Misc.RESET + "       │";
+    String hotelLine = "│       " + Misc.RED + "[]" + Misc.RESET + "       │";
 
     if(hotelList.size() > 0){
       toReturn[5] = hotelLine;
@@ -403,52 +413,76 @@ public class Tile{
   /**
   aids getTile formatting
   */
-  public static String spacer(String str){
+  public static String[] spacer(String str){
     int l = 14 - str.length();
     String spaces = "";
     for(int i = 0; i < l; i++){
       spaces += " ";
     }
-    return spaces;
+    /**
+    String beforeSpace = spaces.substring(0, spaces.length()/2);
+    String afterSpace = spaces.substring(spaces.length()/2, spaces.length());
+    char halfSpace = '\u180E'; 
+    if(spaces.length() % 2 != 0 && spaces.length() > 1){
+      beforeSpace = beforeSpace.substring(0, beforeSpace.length() - 1);
+      beforeSpace += halfSpace;
+      afterSpace += halfSpace;
+    }
+    */
+    String beforeSpace = "";
+    String afterSpace = spaces;
+    String[] toReturn = {beforeSpace, afterSpace};
+    return toReturn;
   }
 
   /**
-  prints tile details
+  prints visual tile
   */
   public void printTile(){
+    String [] tile = this.getTile();
+    for(String toPrint: tile){
+      System.out.println(toPrint);
+    }
+  }
+  
+  /**
+  prints tile details
+  */
+  public void printTileDetails(){
     int rentList[] = this.getRents();
     System.out.println(" - Tile Price " + price);
-    if(innerText.contains("Electric") || innerText.contains("Water")){
-      System.out.println(" - Rent is 4 Times Dice Roll");
-    } else if(innerText.contains("road") || innerText.contains("Line")){
+    if(type == 02){
+      System.out.println(" - With One Utility Owned, Rent is 4 Times Dice Roll");
+      System.out.println(" - With Two Utilities Owned, Rent is 10 Times Dice Roll");
+    } else if(type == 01){
       System.out.println(" - Rent with One Railroad: " + rentList[0]);
       System.out.println(" - Rent with Two Railroads: " + rentList[1]);
       System.out.println(" - Rent with Three Railroads: " + rentList[2]);
       System.out.println(" - Rent with Four Railroads: " + rentList[3]);
     } else {
       for(int i = 0; i < 6; i++){
-        String s = "";
+        String toPrint = "";
         switch(i){
           case 0:
-            s = " - Base Rent with No Properties: ";
+            toPrint = " - Base Rent with No Properties: ";
             break;
           case 1:
-            s = " - Rent with One House: ";
+            toPrint = " - Rent with One House: ";
             break;
           case 2:
-            s = " - Rent with Two Homes: ";
+            toPrint = " - Rent with Two Homes: ";
             break;
           case 3:
-            s = " - Rent with Three Homes: ";
+            toPrint = " - Rent with Three Homes: ";
             break;
           case 4:
-            s = " - Rent with Four Homes ";
+            toPrint = " - Rent with Four Homes ";
             break;
           case 5:
-            s = " - Rent with Hotel: ";
+            toPrint = " - Rent with Hotel: ";
             break;
         }
-        System.out.println(s + rentList[i]);
+        System.out.println(toPrint + rentArr[i]);
       }
     }
   }
