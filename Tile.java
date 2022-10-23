@@ -100,7 +100,7 @@ public class Tile{
     /**
     sets all variables of a tile depending on its location on the board
     */
-  public setTile(int tileLocation){
+  public void setTile(int tileLocation){
     switch (tileLocation) {
       case 0: 
         innerText = "Go -----> Collect 200 ";

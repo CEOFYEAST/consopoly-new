@@ -14,7 +14,7 @@ public class Misc {
   public static final String CYAN = "\033[0;36m";   
   public static final String WHITE = "\033[0;37m";   
   public static final String LIGHT_PURPLE = "\033[38;2;200;0;200m";
-  public static final String TEAL = "\033[38;2;0;225;221m"
+  public static final String TEAL = "\033[38;2;0;225;221m";
   public static final String ORANGE = "\033[38;2;225;153;0m"; 
   public static final String LIGHT_GREEN = "\033[38;2;136;255;0m"; 
   public static final String LIGHT_BLUE = "\033[38;2;120;172;255m"; 
