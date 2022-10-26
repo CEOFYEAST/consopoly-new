@@ -142,13 +142,13 @@ public class Tile{
         type = 2;
         break;
       case 3: 
-        innerText = "Baltic Avenue";
+        innerText = "Baltic" + '\u00A0' + "Avenue";
         tileColor = Misc.BROWN;
         price = 60;
         rentArr = new int[]{4, 20 ,60, 180, 320, 450};
         break;
       case 4: 
-        innerText = "Income Tax";
+        innerText = "Income" + '\u00A0' + "Tax";
         type = 1;
         break;
       case 5: 
@@ -168,7 +168,7 @@ public class Tile{
         type = 2;
         break;
       case 8: 
-        innerText = "Vermont Avenue";
+        innerText = "Vermont" + '\u00A0' + "Avenue";
         tileColor = Misc.LIGHT_BLUE;
         price = 100;
         rentArr = new int[]{6, 30, 90, 270, 400, 550};
@@ -184,7 +184,7 @@ public class Tile{
         type = 5;
         break;
       case 11: 
-        innerText = "St. Charles Place";
+        innerText = "St." + '\u00A0' + "Charles Place";
         tileColor = Misc.LIGHT_PINK;
         price = 140;
         rentArr = new int[]{10, 50, 150, 450, 625, 750};
@@ -195,7 +195,7 @@ public class Tile{
         type = 02;
         break;
       case 13: 
-        innerText = "States Avenue";
+        innerText = "States" + '\u00A0' + "Avenue";
         tileColor = Misc.LIGHT_PINK;
         price = 140;
         rentArr = new int[]{10, 50, 150, 450, 625, 750};
@@ -213,7 +213,7 @@ public class Tile{
         type = 01;
         break;
       case 16: 
-        innerText = "St. James Place";
+        innerText = "St." + '\u00A0' + "James Place";
         tileColor = Misc.ORANGE;
         price = 180;
         rentArr = new int[]{14, 70, 200, 550, 750, 950};
@@ -229,13 +229,13 @@ public class Tile{
         rentArr = new int[]{14, 70, 200, 550, 750, 950};
         break;
       case 19: 
-        innerText = "New York Avenue";
+        innerText = "New" + '\u00A0' + "York Avenue";
         tileColor = Misc.ORANGE;
         price = 200;
         rentArr = new int[]{16, 80, 220, 600, 800, 1000};
         break;
       case 20: 
-        innerText = "Free Parking";
+        innerText = "Free" + '\u00A0' + "Parking";
         type = 5;
         break;
       case 21: 
@@ -249,7 +249,7 @@ public class Tile{
         type = 2;
         break;
       case 23: 
-        innerText = "Indiana Avenue";
+        innerText = "Indiana" + '\u00A0' + "Avenue";
         tileColor = Misc.RED;
         price = 220;
         rentArr = new int[]{18, 90, 250, 700, 875, 1050};
@@ -261,7 +261,7 @@ public class Tile{
         rentArr = new int[]{20, 100, 300, 750, 925, 1100};
         break;
       case 25: 
-        innerText = "B&O Railroad";
+        innerText = "B." + '\u00A0' + "&" + '\u00A0' + "O. Railroad";
         price = 200;
         rentArr = new int[]{50, 100, 150, 200};
         type= 01;
@@ -273,34 +273,34 @@ public class Tile{
         rentArr = new int[]{22, 110, 330, 800, 975, 1150};
         break;
       case 27: 
-        innerText = "Ventnor Avenue";
+        innerText = "Ventnor" + '\u00A0' + "Avenue";
         tileColor = Misc.YELLOW;
         price = 260;
         rentArr = new int[]{22, 110, 330, 800, 975, 1150};
         break;
       case 28: 
-        innerText = "Water Works";
+        innerText = "Water" + '\u00A0' + "Works";
         price = 150;
         type = 02;
         break;
       case 29: 
-        innerText = "Marvin Gardens";
+        innerText = "Marvin" + '\u00A0' + "Gardens";
         tileColor = Misc.YELLOW;
         price = 280;
         rentArr = new int[]{24, 120, 360, 850, 1025, 1200};
         break;
       case 30: 
-        innerText = "Go To Jail";
+        innerText = "Go" + '\u00A0' + "To" + '\u00A0' + "Jail";
         type = 3;
         break;
       case 31: 
-        innerText = "Pacific Avenue";
+        innerText = "Pacific" + '\u00A0' + "Avenue";
         tileColor = Misc.FOREST_GREEN;
         price = 300;
         rentArr = new int[]{26, 130, 390, 900, 100, 1275};
         break;
       case 32: 
-        innerText = "North Carolina Avenue";
+        innerText = "North" + '\u00A0' + "Carolina Avenue";
         tileColor = Misc.FOREST_GREEN;
         price = 300;
         rentArr = new int[]{26, 130, 390, 900, 100, 1275};
@@ -316,7 +316,7 @@ public class Tile{
         rentArr = new int[]{28, 150, 450, 1000, 1200, 1400};
         break;
       case 35: 
-        innerText = "Short Line";
+        innerText = "Short" + '\u00A0' + "Line";
         price = 200;
         rentArr = new int[]{50, 100, 150, 200};
         type = 01;
@@ -326,13 +326,13 @@ public class Tile{
         type = 2;
         break;
       case 37: 
-        innerText = "Park Place";
+        innerText = "Park" + '\u00A0' + "Place";
         tileColor = Misc.DARK_BLUE;
         price = 350;
         rentArr = new int[]{35, 175, 500, 1100, 1300, 1500};
         break;
       case 38: 
-        innerText = "Luxury Tax";
+        innerText = "Luxury" + '\u00A0' + "Tax";
         type = 1;
         break;
       case 39: 
@@ -383,12 +383,14 @@ public class Tile{
       "│                │", //6
       "└────────────────┘"}; //7
 
+    //lines representing hotels/houses
     String oneLine = "│       " + Misc.GREEN + "[]" + Misc.RESET + "       │";
     String twoLine =  "│    " + Misc.GREEN + "[]    []" + Misc.RESET + "    │";
     String threeLine = "│   " + Misc.GREEN + "[]  []  []" + Misc.RESET + "   │";
 
     String hotelLine = "│       " + Misc.RED + "[]" + Misc.RESET + "       │";
 
+    //places hotels/houses on tiles
     if(hotelList.size() > 0){
       toReturn[5] = hotelLine;
     } else if(houseList.size() == 1){
@@ -414,11 +416,13 @@ public class Tile{
   aids getTile formatting
   */
   public static String[] spacer(String str){
+    //deduces number of spaces to place after each line on the tile for formatting 
     int l = 14 - str.length();
     String spaces = "";
     for(int i = 0; i < l; i++){
       spaces += " ";
     }
+    //splits spaces in half...half go before the text and the other half go after the text 
     /**
     String beforeSpace = spaces.substring(0, spaces.length()/2);
     String afterSpace = spaces.substring(spaces.length()/2, spaces.length());
