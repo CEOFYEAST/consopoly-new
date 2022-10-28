@@ -384,10 +384,11 @@ public class Tile{
       "└────────────────┘"}; //7
 
     //lines representing hotels/houses
-    String oneLine = "│       " + Misc.GREEN + "[]" + Misc.RESET + "       │";
-    String twoLine =  "│    " + Misc.GREEN + "[]    []" + Misc.RESET + "    │";
+    String oneLine =   "│       " + Misc.GREEN + "[]" + Misc.RESET + "       │";
+    String twoLine =   "│    " + Misc.GREEN + "[]    []" + Misc.RESET + "    │";
     String threeLine = "│   " + Misc.GREEN + "[]  []  []" + Misc.RESET + "   │";
-
+    String fourLine = " │ " + Misc.GREEN + "[]  []  []  []" + Misc.RESET + " │";
+    
     String hotelLine = "│       " + Misc.RED + "[]" + Misc.RESET + "       │";
 
     //places hotels/houses on tiles
@@ -400,8 +401,11 @@ public class Tile{
     } else if(houseList.size() == 3){
       toReturn[5] = threeLine;
     } else if(houseList.size() == 4){
+      /**
       toReturn[5] = twoLine;
       toReturn[6] = twoLine;
+      */
+      toReturn[5] = fourLine;
     } else if(houseList.size() == 5){
       toReturn[5] = threeLine;
       toReturn[6] = twoLine;
@@ -491,7 +495,3 @@ public class Tile{
     }
   }
 }
-
-
-
-

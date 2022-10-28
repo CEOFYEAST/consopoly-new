@@ -39,12 +39,57 @@ class Main {
     player.printInventory();
     */
 
+    Player player = new Player("Dog");
+
+    /**
+    Tile medditeranean = new Tile(1);
+    Tile newYorkAve = new Tile(19);
+    Tile tennessee = new Tile(18);
+
+    medditeranean.setOwner(player);
+    newYorkAve.setOwner(player);
+    tennessee.setOwner(player);
+
+    player.addProperty(medditeranean);
+    player.addProperty(newYorkAve);
+    player.addProperty(tennessee);
+    */
+
+    for(int i = 0; i < 38; i++){
+      Tile newTile = new Tile(i);
+      if(newTile.getType() == 0){
+        newTile.setOwner(player);
+        player.addProperty(newTile);
+
+        for(int l = 0; l < 4; l++){
+          House house = new House(newTile, player);
+          newTile.addHouse(house);
+        }
+      }
+    }
     
+    player.setTileArray();
+    player.setPropertyZeros();
+    
+    //String[] property = player.formatInventory();
+
+    player.printInventory();
+    
+    /**
+    for(String line: property){
+      System.out.println(line);
+    }
+    */
+    
+    /**
     for(int i = 0; i < 40; i++){
       Tile newTile = new Tile(i);
-      newTile.printTile();
+      if(newTile.getType() == 0){
+        newTile.setOwner(player);
+        player.addProperty(newTile);
+      }
     }
-
+    */
     
     
   }
