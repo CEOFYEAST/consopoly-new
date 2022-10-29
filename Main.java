@@ -39,7 +39,7 @@ class Main {
     player.printInventory();
     */
 
-    Player player = new Player("Dog");
+    
 
     /**
     Tile medditeranean = new Tile(1);
@@ -55,12 +55,13 @@ class Main {
     player.addProperty(tennessee);
     */
 
-    for(int i = 0; i < 38; i++){
+    Player player = new Player("Dog");
+    
+    for(int i = 0; i < 26; i++){
       Tile newTile = new Tile(i);
-      if(newTile.getType() == 0){
+      if(newTile.getType() == 0 && (i % 2 == 0 || i == 1)){
         newTile.setOwner(player);
         player.addProperty(newTile);
-
         for(int l = 0; l < 4; l++){
           House house = new House(newTile, player);
           newTile.addHouse(house);
@@ -68,11 +69,7 @@ class Main {
       }
     }
     
-    player.setTileArray();
-    player.setPropertyZeros();
-    
-    //String[] property = player.formatInventory();
-
+    player.updateTileArrays();
     player.printInventory();
     
     /**
