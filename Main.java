@@ -56,21 +56,31 @@ class Main {
     */
 
     Player player = new Player("Dog");
+
+    Tile[] tiles = new Tile[40];
     
-    for(int i = 0; i < 26; i++){
+    for(int i = 0; i < 40; i++){
       Tile newTile = new Tile(i);
-      if(newTile.getType() == 0 && (i % 2 == 0 || i == 1)){
+      tiles[i] = newTile;
+      if((newTile.getType() == 0 || newTile.getType() == 01 || newTile.getType() == 02)){
         newTile.setOwner(player);
         player.addProperty(newTile);
-        for(int l = 0; l < 4; l++){
-          House house = new House(newTile, player);
-          newTile.addHouse(house);
+        if(newTile.getType() == 0){
+          if(i % 2 == 0){
+            for(int l = 0; l < 4; l++){
+              House house = new House(newTile, player);
+              newTile.addHouse(house);
+            }
+          } else {
+            Hotel hotel = new Hotel(newTile, player);
+            newTile.addHotel(hotel);
+          }
         }
       }
     }
     
     player.updateTileArrays();
-    player.printInventory();
+    player.printInventory(tiles);
     
     /**
     for(String line: property){

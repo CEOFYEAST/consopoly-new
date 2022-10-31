@@ -134,6 +134,7 @@ public class Player{
       int currentTilePosition = currentTile.getPosition();
       //makes sure tileArray contains every tile in tile property (useful when property is added to a player's inventory)
       switch(currentTilePosition){
+        //property tiles
         case 1:
           tileArray[0][0] = currentTilePosition;
           break;     
@@ -200,6 +201,26 @@ public class Player{
         case 39:
           tileArray[7][1] = currentTilePosition;
           break;
+        //railroad tiles
+        case 5:
+          railroadTileArray[0] = currentTilePosition;
+          break;
+        case 15:
+          railroadTileArray[1] = currentTilePosition;
+          break;
+        case 25:
+          railroadTileArray[2] = currentTilePosition;
+          break;
+        case 35:
+          railroadTileArray[3] = currentTilePosition;
+          break;
+        //utility tiles
+        case 12:
+          utilityTileArray[0] = currentTilePosition;
+          break;
+        case 28:
+          utilityTileArray[1] = currentTilePosition;
+          break;
       }
     }
     //removes any property from tileArray not present in tileProperty (useful when property is removed from a player's inventory)
@@ -225,7 +246,7 @@ public class Player{
   /**
   aids print inventory: formats inventory to be printed
   */
-  private String[] formatInventory(){
+  private String[] formatInventory(Tile[] tiles){
     //counts number of monopolies that have atleast one owned property
     ArrayList<Integer> monopoliesToPrintIndices = new ArrayList<Integer>();
     for(int row = 0; row < tileArray.length; row++){
@@ -240,9 +261,9 @@ public class Player{
     //calls fillInventory twice if more than 4 monopolies need to be printed, and splices the two arrays into one complete inventory
     if(monopoliesToPrintIndices.size() > 4){
       //array containing first halve of toReturn
-      String[] firstInventoryArray = fillInventory(0, monopoliesToPrintIndices.get(3));
+      String[] firstInventoryArray = fillInventory(tiles, 0, monopoliesToPrintIndices.get(3));
       //array containing second halve of toReturn
-      String[] secondInventoryArray = fillInventory(monopoliesToPrintIndices.get(4), monopoliesToPrintIndices.size() - 1);
+      String[] secondInventoryArray = fillInventory(tiles, monopoliesToPrintIndices.get(4), monopoliesToPrintIndices.size() - 1);
       //array containing firstInventoryArray and secondInventoryArray spliced together
       String[] toReturn = new String[firstInventoryArray.length + secondInventoryArray.length];
 
@@ -258,14 +279,14 @@ public class Player{
     //calls fillInventory once if 4 or less monopolies need to be printed
     else {
       //sends full tileArray
-      return fillInventory(0, 7);
+      return fillInventory(tiles, 0, 7);
     } 
   }
 
   /**
   aids print inventory: returns formatted inventory including only monopolies from start to end
   */
-  private String[] fillInventory(int start, int end){
+  private String[] fillInventory(Tile[] tiles, int start, int end){
     //new tile array that will only contain owned property values from start to end range 
     int modifiedTileArray[][] =
     {
@@ -391,12 +412,12 @@ public class Player{
             if(line == 0){
               lineOn += " ________________ ";
             } else{
-              lineOn += "|                |";
+              lineOn += "|" + Misc.BACKGROUND_GREY + "                " + Misc.RESET + "|";
             }
           } 
           //generates visual tile if tile is owned 
           else if(tilePos != 100){
-            Tile currentTile = new Tile(tilePos);
+            Tile currentTile = tiles[tilePos];
             String printTile[] = currentTile.getTile();
             lineOn += printTile[line]; 
           }
@@ -434,7 +455,7 @@ public class Player{
             if(line == 0){
               lineOn += " ________________ ";
             } else{
-              lineOn += "|                |";
+              lineOn += "|" + Misc.BACKGROUND_GREY + "                " + Misc.RESET + "|";
             }
           } 
           //generates visual tile if tile is owned 
@@ -453,29 +474,33 @@ public class Player{
   /**
   prints visual representation of a player's owned properties for trading and managing
   */
-  public void printInventory(){
+  public void printInventory(Tile[] tiles){
     Misc.clear();
 
     System.out.println("Exit: y/n");
     
-    String[] inventoryArray = formatInventory();
+    String[] inventoryArray = formatInventory(tiles);
     String[] railroadInventoryArray = fillExtraneousInventory(railroadTileArray);
     String[] utilityInventoryArray = fillExtraneousInventory(utilityTileArray);
 
+    //length of inventory seperator lines
+      //currently set to length of railroad inventory array
+    int seperatorLength = 87;
+    
       //for aesthetics
-    printInventorySeperatorLines(inventoryArray, "PROPERTY");
+    printInventorySeperatorLines(seperatorLength, "PROPERTY", Misc.GOLD, Misc.WHITE);
     //prints main player inventory
     printInventoryLines(inventoryArray, "Property");
 
       //for aesthetics
     System.out.print("\n");
-    printInventorySeperatorLines(inventoryArray, "RAIlROADS");
+    printInventorySeperatorLines(seperatorLength, "RAILROADS", Misc.GOLD, Misc.WHITE);
     //prints railroad inventory
     printInventoryLines(railroadInventoryArray, "Railroads");
     
       //for aesthetics
     System.out.print("\n");
-    printInventorySeperatorLines(inventoryArray, "UTILITIES");
+    printInventorySeperatorLines(seperatorLength, "UTILITIES", Misc.GOLD, Misc.WHITE);
     //prints utility inventory
     printInventoryLines(utilityInventoryArray, "Utilities");
   }
@@ -500,15 +525,15 @@ public class Player{
   /**
   aids print inventory: prints lines seperating sections of player inventory
   */
-  private static void printInventorySeperatorLines(String[] inventoryArray, String content){
+  private static void printInventorySeperatorLines(int length, String content, String contentColor, String lineColor){
     content = " " + content + " ";
     int i = content.length()/2;
     while(true){
       System.out.print("-");
-      if(i == inventoryArray[0].length()/2){
-        System.out.print(Misc.GOLD + content + Misc.RESET);
+      if(i == length/2){
+        System.out.print(contentColor + content + Misc.RESET);
         i += content.length()/2;
-      } else if (i == inventoryArray[0].length() - 1){
+      } else if (i == length - 1){
         System.out.print("\n");
         break;
       }

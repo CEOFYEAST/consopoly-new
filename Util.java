@@ -17,4 +17,17 @@ public class Util {
         
       }
   }
+
+  /**
+  returns true if every value in given array is null
+  */
+  public static boolean allNull(Object[] toCheck){
+    boolean allNull = true;
+    for(Object i: toCheck){
+      if(i != null){
+        return false;
+      } 
+    }
+    return true;
+  }
 }
