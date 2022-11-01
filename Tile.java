@@ -65,6 +65,9 @@ public class Tile{
   public int getPrice(){
     return price;
   }
+  public int getMortgage(){
+    return price/2;
+  }
   public int getPosition(){
     return position;
   }
@@ -451,7 +454,8 @@ public class Tile{
       outlineColor + "│────────────────│" + Misc.RESET, //4
       outlineColor + "│" + Misc.RESET + propertyLine + outlineColor + "│" + Misc.RESET, //5
       outlineColor + "│                │" + Misc.RESET, //6
-      outlineColor + "└────────────────┘" + Misc.RESET //7
+      outlineColor + "│                │" + Misc.RESET, //7
+      outlineColor + "└────────────────┘" + Misc.RESET //8
     }; 
     return toReturn;
 	}

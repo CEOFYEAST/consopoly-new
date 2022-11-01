@@ -55,13 +55,16 @@ public class Player{
   public void setMoney(int money){
     this.money = money;
   }
-  public void minusMoney(int money){
-    this.money -= money;
-    System.out.println(iconName + " has been deducted " + money + " dollars");
-  }
-  public void addMoney(int money){
-    this.money += money;
-    System.out.println(iconName + " has been given " + money + " dollars");
+  public void addMoney(int toAdd){
+    this.money += toAdd;
+    if(this.money < 0){
+      this.money = 0;
+    }
+    if(toAdd < 0){
+      System.out.println(iconName + " has been deducted $" + toAdd);
+    } else {
+      System.out.println(iconName + " has been given $" + toAdd);
+    }
   }
   public String getIconName(){
     return iconName;
@@ -128,7 +131,11 @@ public class Player{
     }
     return rowZs;
   }
-  public void updateTileArrays(){
+  
+  /**
+  updates tile arrays to account for changes in property ownership, such as buying or selling of property
+  */
+  private void updateTileArrays(){
     for(int i = 0; i < tileProperty.size(); i++){
       Tile currentTile = tileProperty.get(i);
       int currentTilePosition = currentTile.getPosition();
@@ -241,6 +248,43 @@ public class Player{
         }
       }
     }
+  }
+
+    /**
+  purchases specified tile for the player, taking care to remove the tile from the inventory of it's previous owner (if it has one) and deduct the tile's price from the new owner's balance 
+  */
+  public void purchaseTile(Tile toPurchase){
+    //removes tile from previous owner's inventory
+    if(toPurchase.getOwner() != null){
+      Player previousOwner = toPurchase.getOwner();
+      previousOwner.removeTile(toPurchase);
+    }
+    addTile(toPurchase);
+    addMoney(-(toPurchase.getPrice()));
+  }
+  
+  /**
+  adds specified tile to player inventory, updates tileArrays to reflect this change 
+  */
+  public void addTile(Tile toAdd){
+    toAdd.setOwner(this);
+    tileProperty.add(toAdd);
+    updateTileArrays();
+  }
+
+  /**
+  removes specified tile from tileProperty, updates tileArrays to reflect this change 
+  */
+  public void removeTile(Tile toRemove){
+    int toRemoveIndex = 0;
+    for(Tile tile: tileProperty){
+      if(tile == toRemove){
+        tileProperty.remove(toRemoveIndex);
+        break;
+      }
+      toRemoveIndex++;
+    }
+    updateTileArrays();
   }
   
   /**
