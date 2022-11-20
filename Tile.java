@@ -455,11 +455,101 @@ public class Tile{
       outlineColor + "│" + Misc.RESET + propertyLine + outlineColor + "│" + Misc.RESET, //5
       outlineColor + "│                │" + Misc.RESET, //6
       outlineColor + "│                │" + Misc.RESET, //7
-      outlineColor + "└────────────────┘" + Misc.RESET //8
+      outlineColor + "│                │" + Misc.RESET, //8
+      outlineColor + "└────────────────┘" + Misc.RESET //9
     }; 
     return toReturn;
 	}
+  
+  /**
+  returns visual representation of players currently visiting tile
+  */
+  public String[] getTileIcons(Player currentPlayer) {
+    // list of all players
+    ArrayList<Player> playerList = Board.getPlayerListCopy();
+    // list of strings to be returned
+    String[] toReturn = new String[9];
 
+    //fills toReturn with empty strings to avoid null calls 
+    for(int i = 0; i < toReturn.length; i++){
+      toReturn[i] = "";
+    }
+
+    // removes currentPlayer and players whose positions aren't on the tile from playerList
+    for (int i = 0; i < playerList.size(); i++) {
+      Player player = playerList.get(i);
+      // checks for currentPlayer
+      if (player == currentPlayer) {
+        playerList.remove(i);
+        i--;
+      }
+      // checks for players not actually on tile
+      else if(player.getPosition() != this.position) {
+        playerList.remove(i);
+        i--;
+      }
+    }
+
+    // starting index in playerList for lineIndex loop
+    int addIndex = 0;
+    for (int playerIndex = 0; playerIndex < playerList.size(); playerIndex++) {
+      Player player = playerList.get(playerIndex);
+      String[] icon = player.getIcon();
+
+      // adds every line of icon to toReturn
+      for(int lineIndex = addIndex; lineIndex < addIndex + 3; lineIndex++) {
+        // before/after spaces content
+        String spacesToAdd = "   ";
+
+        // adds before space to icon if icon is first in it's row
+        if (playerIndex == 0 || playerIndex == 3 || playerIndex == 6) {
+          toReturn[lineIndex] += spacesToAdd;
+          
+          // adds extra space if icon is in the last row
+          if (playerIndex == 6) {
+            toReturn[lineIndex] += spacesToAdd;
+            toReturn[lineIndex] += " ";
+          }
+        }
+
+        // adds tile content to toReturn at lineIndex (get, set, add)
+        toReturn[lineIndex] += icon[lineIndex - addIndex] + " ";
+
+        // adds after space to icon if icon is last in its row
+        // adds to addIndex if icon is last in its row, and lineIndex is on the last line
+        if (playerIndex == 2 || playerIndex == 5 || playerIndex == 6) {
+          toReturn[lineIndex] += spacesToAdd;
+          // adds extra space if icon is in the last row
+          if (playerIndex == 6) {
+            toReturn[lineIndex] += spacesToAdd;
+          }
+          // adds to addIndex if icon is last in it's row, and lineIndex is on the last line
+          if (lineIndex == 2 || lineIndex == 5) {
+            addIndex += 3;
+            break;
+          }
+        }
+        // checks for icons that are last in their row but their row isn't full
+        else if(playerList.size() == playerIndex + 1) {
+          // addds two spaces by default (one icon is missing from row)
+          toReturn[lineIndex] += spacesToAdd;
+          toReturn[lineIndex] += spacesToAdd;
+          // adds extra space if two icons are missing from row
+          if (playerIndex == 0 || playerIndex == 3) {
+            toReturn[lineIndex] += spacesToAdd;
+          }
+        }
+      }
+    }
+    //checks for empty lines and fills them with spaces
+    for(int line = 0; line < toReturn.length; line++){
+      if(toReturn[line].isEmpty()){
+        toReturn[line] = "                  ";
+      }
+    }
+    return toReturn;
+  }
+  
   /**
   prints visual tile
   */

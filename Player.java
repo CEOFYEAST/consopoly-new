@@ -131,6 +131,69 @@ public class Player{
     }
     return rowZs;
   }
+  /**
+  method containing visual representations of player icons 
+  */
+  public String[] getIcon(){
+    if(iconName == "Scottie Dog"){
+      String toReturn[] = new String[]{
+        "_┌┐",
+        "___",
+        "| |"
+      };
+      return toReturn;
+    } else if(iconName == "Tophat"){
+      String toReturn[] = new String[]{
+        "|||",
+        "|||",
+        "---"
+      };
+      return toReturn;
+    } else if(iconName == "Thimble"){
+      String toReturn[] = new String[]{
+        " _ ",
+        "| |",
+        "---"
+      };
+      return toReturn;
+    } else if(iconName == "Battleship"){
+      String toReturn[] = new String[]{
+        " |>",
+        "_|_",
+        "|_/"
+      };
+      return toReturn;
+    } else if(iconName == "Racing Car"){
+      String toReturn[] = new String[]{
+        "__ ",
+        "__]",
+        "0 0"
+      };
+      return toReturn;
+    } else if(iconName == "Cat"){
+      String toReturn[] = new String[]{
+        "_00",
+        "___",
+        "| |"
+      };
+      return toReturn;
+    } else if(iconName == "Wheelbarrow"){
+      String toReturn[] = new String[]{
+        "___",
+        "__/",
+        "0/ "
+      };
+      return toReturn;
+    } else if(iconName == "Boot"){
+      String toReturn[] = new String[]{
+        "__ ",
+        "|| ",
+        "|_]"
+      };
+      return toReturn;
+    }
+    return null;
+  }
   
   /**
   updates tile arrays to account for changes in property ownership, such as buying or selling of property
@@ -518,10 +581,13 @@ public class Player{
   /**
   prints visual representation of a player's owned properties for trading and managing
   */
-  public void printInventory(Tile[] tiles){
+  public void printInventory(){
     Misc.clear();
 
     System.out.println("Exit: y/n");
+
+    //grabs tiles to be used in printing 
+    Tile[] tiles = Board.getTiles();
     
     String[] inventoryArray = formatInventory(tiles);
     String[] railroadInventoryArray = fillExtraneousInventory(railroadTileArray);

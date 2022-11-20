@@ -2,31 +2,14 @@ import java.util.*;
 
 class Main {
   public static void main(String[] args) {
-    Player player = new Player("Dog");
-
-    //array storing copy of every tile
-    Tile[] tiles = new Tile[40];
-
-    //gives player every property, adding homes and hotels to monopolies for testing
-    for(int i = 0; i < 20; i++){
-      Tile newTile = new Tile(i);
-      tiles[i] = newTile;
-      if((newTile.getType() == 0 || newTile.getType() == 01 || newTile.getType() == 02)){
-        player.purchaseTile(newTile);
-        if(newTile.getType() == 0){
-          if(i % 2 == 0){
-            for(int l = 0; l < 4; l++){
-              House house = new House(newTile, player);
-              newTile.addHouse(house);
-            }
-          } else {
-            Hotel hotel = new Hotel(newTile, player);
-            newTile.addHotel(hotel);
-          }
-        }
-      }
-    }
-    
-    player.printInventory(tiles);
+    int[] positions = new int[] {0, 0, 1, 2, 4, 6, 8, 8};
+    Util.printBoardTest(positions);
+    ArrayList<Player> playerList = Board.getPlayerList();
+    //int startLocation, int destination, int length, Player toMove
+    //Board.printBoard(-3, 1, 7, playerList.get(0));
+    Board.movePlayer(5, 5, playerList.get(0));
+    Util.tryWait(2000);
+    Board.movePlayer(80, 5, playerList.get(1));
+    //player.printInventory();
   }
 }
