@@ -534,9 +534,11 @@ public class Tile{
           // addds two spaces by default (one icon is missing from row)
           toReturn[lineIndex] += spacesToAdd;
           toReturn[lineIndex] += spacesToAdd;
+          toReturn[lineIndex] += " ";
           // adds extra space if two icons are missing from row
           if (playerIndex == 0 || playerIndex == 3) {
             toReturn[lineIndex] += spacesToAdd;
+            toReturn[lineIndex] += " ";
           }
         }
       }

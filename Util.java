@@ -62,11 +62,10 @@ public class Util {
   gives a player every property, adding homes and hotels to monopolies (for testing)
   */
   public static void giveAllProperties(Player player){
-    Board.initializeBoard(1);
-    
     for(int i = 0; i < 40; i++){
       Tile currentTile = Board.getTile(i);
       if((currentTile.getType() == 0 || currentTile.getType() == 01 || currentTile.getType() == 02)){
+        if(i % 2 == 1){
         player.purchaseTile(currentTile);
         Misc.clear();
         if(currentTile.getType() == 0){
@@ -81,11 +80,12 @@ public class Util {
           }
         }
       }
+      }
     }
   }
 
   /**
-  initializes 8 players and sets their positions arbitrarily around the board (for testing)
+  initializes 8 players and sets their positions around the board (for testing)
   */
   public static void printBoardTest(int[] positions){
       //array containing icon names

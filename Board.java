@@ -53,7 +53,7 @@ public class Board{
     return tiles[index];
   }
 
-  public static void printBoard(int startLocation, String spaces, int length, Player toMove){
+  private static void printBoard(int startLocation, String spaces, int length, Player toMove){
       //index of tiles to be filled 
     int tilesIndex = 0;
       //2d array containing visual tiles of tiles 
@@ -75,7 +75,7 @@ public class Board{
         assignIndex = 40 + assignIndex;
       }
       //initializes visual and icons arrays at tileIndex
-      Tile tile = new Tile(assignIndex);
+      Tile tile = Board.getTile(assignIndex);
       visualArray[tilesIndex] = tile.getTile();
       iconsArray[tilesIndex] = tile.getTileIcons(toMove);
       
@@ -142,6 +142,13 @@ public class Board{
       
       player.addToPosition(1);
       playerPosition = player.getPosition();
+
+      //if player passes go
+      if(playerPosition == 0){
+        Misc.clear();
+        Misc.passGoAnimation();
+        Misc.clear();
+      }
       
       //if playerPosition is within range of destination
       if(!(playerPosition <= destination - (length/2))){

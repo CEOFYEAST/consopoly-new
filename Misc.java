@@ -49,6 +49,17 @@ public class Misc {
   public static final String BACKGROUND_BANANA_YELLOW = "\033[48;2;240;238;113m"; 
   public static final String BACKGROUND_DARK_RED = "\033[48;2;145;40;16m";
   public static final String BACKGROUND_LIGHT_PINK = "\033[48;2;255;153;240m";
+    //graphics modes
+  public static final String BOLD = "\u001b[1m";
+  public static final String DIM = "\u001b[2m";
+  public static final String ITALIC = "\u001b[3m";
+  public static final String UNDERLINE = "\u001b[4m";
+  public static final String REVERSE = "\u001b[7m";
+  public static final String HIDDEN = "\u001b[8m";
+  public static final String STRIKETHROUGH = "\u001b[9m";
+    //cursor, line manipulation
+  public static final String SAVE_CURSOR_POSITION = "\u001b[s";
+  public static final String RESTORE_CURSOR_POSITION = "\u001b[u";
 
   
   /**
@@ -113,6 +124,52 @@ public class Misc {
         continue;
       } 
       System.out.println(boardArr[i]);
+    }
+  }
+
+  /**
+  plays animation for player passing GO
+  (ASCI font, Broadway KB, courtesy of patorjk.com/software/taag/)
+  */
+  public static void passGoAnimation(){
+    String[] passedGoArr = new String[]
+    {
+      GOLD + " ___    __    __   __   ____  ___       __    ___  ",
+             "| |_)  / /\\  ( (` ( (` | |_  | | \\     / /`_ / / \\ ",
+             "|_|   /_/--\\ _)_) _)_) |_|__ |_|_/     \\_\\_/ \\_\\_/ " + RESET
+    };
+
+    String[] plusMoneyArr = new String[]
+    {
+      GREEN + "         ___ ___  ___   ",
+              "  _//   |_  / _ \\/ _ \\",
+              " (_-<  / __/ // / // /  ",
+              "/ __/ /____|___/\\___/  ",
+              "//                      " + RESET            
+    };
+
+    for(String line : passedGoArr){
+      System.out.println(line);
+    }
+
+    System.out.println("");
+
+    System.out.print(SAVE_CURSOR_POSITION);
+
+    //prints out +200, creating a blinking effect in the process
+    String spaces = "             ";
+    for(int i = 0; i < 5; i++){
+      System.out.print(RESTORE_CURSOR_POSITION);
+      if(i % 2 == 1){
+        for(int l = 0; l < plusMoneyArr.length; l++){
+          System.out.println(spaces + "                        ");
+        }
+      } else{
+        for(String line : plusMoneyArr){
+          System.out.println(spaces + line);
+        }
+      }
+      Util.tryWait(700);
     }
   }
 }
