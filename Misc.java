@@ -112,12 +112,12 @@ public class Misc {
     };
 
     for(String s: boardArr){
-      System.out.println(s);
-      Util.tryWait(150);
+      Rev.addToPrint(s, true);
     }
 
-    clear();
+    Rev.print();
 
+    /**
     for(int i = 0; i < boardArr.length; i++){
       if(i == 6){
         System.out.println("│|" + FOREST_GREEN + "-" + RESET + "|     CONSOPOLY     |" + ORANGE + "-" + RESET + "|│");
@@ -125,6 +125,7 @@ public class Misc {
       } 
       System.out.println(boardArr[i]);
     }
+    */
   }
 
   /**
