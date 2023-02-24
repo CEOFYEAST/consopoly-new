@@ -128,6 +128,39 @@ public class Misc {
     */
   }
 
+  public static void printOldBoard(){
+    String boardArr[] = new String[]
+    {
+      " _________________________",
+      "│|" + RED + "<>" + RESET + "|" + BROWN + "-" + RESET + "|" + LIGHT_BLUE + "|" + RESET + "|" + BROWN + "-" + RESET + "|" + BANANA_YELLOW + "*" + RESET + "|" + WHITE + "|" + RESET + "|" + LIGHT_BLUE + "-" + RESET + "|" + ROSY_PINK + "|" + RESET + "|" + LIGHT_BLUE + "-" + RESET + "|" + LIGHT_BLUE + "-" + RESET + "|" + ORANGE + "<>" + RESET + "|│",
+      
+      "│|" + PURPLE + "-" + RESET + "|                   |" + LIGHT_PURPLE + "-" + RESET + "|│",
+      
+      "│|" + BANANA_YELLOW + "|" + RESET + "|                   |"+ BANANA_YELLOW + "|" + RESET + "|│",
+      
+      "│|" + PURPLE + "-" + RESET + "|                   |" + LIGHT_PURPLE + "-" + RESET + "|│",
+      
+      "│|" + ORANGE + "|" + RESET + "|                   |" + LIGHT_PURPLE + "-" + RESET + "|│",
+      
+      "│|" + BLACK + "|" + RESET + "|                   |" + BLACK + "|" + RESET + "|│",
+      
+      "│|" + FOREST_GREEN + "-" + RESET + "|                   |" + ORANGE + "-" + RESET + "|│",
+      
+      "│|" + LIGHT_BLUE + "|" + RESET + "|                   |" + LIGHT_BLUE + "|" + RESET + "|│",
+      
+      "│|" + FOREST_GREEN + "-" + RESET + "|                   |" + ORANGE + "-" + RESET + "|│",
+
+      "│|" + FOREST_GREEN + "-" + RESET + "|                   |" + ORANGE + "-" + RESET + "|│",
+      
+      "│|" + DARK_BLUE + "<>" + RESET + "|" + BANANA_YELLOW + "-" + RESET + "|" + ORANGE + "*" + RESET + "|" + BANANA_YELLOW + "-" + RESET + "|" + BANANA_YELLOW + "-" + RESET + "|" + BLACK + "|" + RESET + "|" + RED + "-" + RESET + "|" + RED + "-" + RESET + "|" + LIGHT_BLUE + "|" + RESET + "|" + RED + "-" + RESET + "|" + DARK_RED + "<>" + RESET + "|│",
+      " ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾"
+    };
+
+    for(String s: boardArr){
+      System.out.println(s);
+    }
+  }
+
   /**
   plays animation for player passing GO
   (ASCI font, Broadway KB, courtesy of patorjk.com/software/taag/)

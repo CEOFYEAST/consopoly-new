@@ -65,21 +65,21 @@ public class Util {
     for(int i = 0; i < 40; i++){
       Tile currentTile = Board.getTile(i);
       if((currentTile.getType() == 0 || currentTile.getType() == 01 || currentTile.getType() == 02)){
-        if(i % 2 == 1){
-        player.purchaseTile(currentTile);
-        Misc.clear();
-        if(currentTile.getType() == 0){
-          if(i % 2 == 0){
-            for(int l = 0; l < 4; l++){
-              House house = new House(currentTile, player);
-              currentTile.addHouse(house);
+          if(i % 2 == 1){
+          player.purchaseTile(currentTile);
+          Misc.clear();
+          if(currentTile.getType() == 0){
+            if(i % 2 == 0){
+              for(int l = 0; l < 4; l++){
+                House house = new House(currentTile, player);
+                currentTile.addHouse(house);
+              }
+            } else {
+              Hotel hotel = new Hotel(currentTile, player);
+              currentTile.addHotel(hotel);
             }
-          } else {
-            Hotel hotel = new Hotel(currentTile, player);
-            currentTile.addHotel(hotel);
           }
         }
-      }
       }
     }
   }
