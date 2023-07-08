@@ -1,5 +1,5 @@
 /**
-class designed to aid in the animation and sylization of the game
+class designed to aid in the animation and stylization of the game
 */
 public class Misc {
   //member variables

@@ -36,7 +36,7 @@ public class Tile{
   private String bottomLine = "              ";
       //used for visual tile color
   private String tileColor = Misc.WHITE;
-  private String outlineColor = Misc.WHITE;
+  private String outlineColor = Misc.BLACK;
 
   
   //constructor 
@@ -174,8 +174,8 @@ public class Tile{
         break;
       case 5: 
         //ref        "              "
-        colorLine = "    Reading     ";
-        topLine =    "   Railroad   ";
+        topLine =    "   Reading    ";
+        bottomLine = "   Railroad   ";
         price = 200;
         rentArr = new int[]{50, 100, 150, 200};
         type = 01;
@@ -190,8 +190,8 @@ public class Tile{
         break;
       case 7: 
         //ref        "              "
-        colorLine = "     Chance     ";
-        topLine =    "      ?       ";
+        topLine =    "    Chance    ";
+        bottomLine = "      ?       ";
         type = 2;
         break;
       case 8: 
@@ -225,8 +225,8 @@ public class Tile{
         break;
       case 12: 
         //ref        "              "
-        colorLine = "    Electric    ";
-        topLine =    "   Company    ";
+        topLine =    "   Electric   ";
+        bottomLine = "   Company    ";
         price = 150;
         type = 02;
         break;
@@ -247,8 +247,8 @@ public class Tile{
         break;
       case 15: 
         //ref        "              "
-        colorLine = "  Pennsylvania  ";
-        topLine =    "   Railroad   ";
+        topLine =    " Pennsylvania ";
+        bottomLine = "   Railroad   ";
         price = 200;
         rentArr = new int[]{50, 100, 150, 200};
         type = 01;
@@ -297,8 +297,8 @@ public class Tile{
         break;
       case 22: 
         //ref        "              "
-        colorLine = "     Chance     ";
-        topLine =    "      ?       ";
+        topLine =    "    Chance    ";
+        bottomLine = "      ?       ";
         type = 2;
         break;
       case 23: 
@@ -340,7 +340,7 @@ public class Tile{
         break;
       case 28: 
         //ref        "              "
-        colorLine = "  Water Works   ";
+        topLine =    " Water Works  ";
         price = 150;
         type = 02;
         break;
@@ -394,8 +394,8 @@ public class Tile{
         break;
       case 36: 
         //ref        "              "
-        colorLine = "     Chance     ";
-        topLine =    "      ?       ";
+        topLine =    "    Chance    ";
+        bottomLine = "      ?       ";
         type = 2;
         break;
       case 37: 
@@ -449,17 +449,32 @@ public class Tile{
     {
       outlineColor + "┌────────────────┐" + Misc.RESET, //0
       outlineColor + "│" + Misc.RESET + tileColor + colorLine + Misc.RESET + outlineColor + "│" + Misc.RESET, //1
-      outlineColor + "│ " + Misc.RESET + Misc.WHITE + topLine + Misc.RESET + outlineColor + " │" + Misc.RESET, //2
-      outlineColor + "│ " + Misc.RESET + Misc.WHITE + bottomLine + Misc.RESET + outlineColor + " │" + Misc.RESET, //3
+      outlineColor + "│ " + Misc.RESET + Misc.BLACK + topLine + Misc.RESET + outlineColor + " │" + Misc.RESET, //2
+      outlineColor + "│ " + Misc.RESET + Misc.BLACK + bottomLine + Misc.RESET + outlineColor + " │" + Misc.RESET, //3
       outlineColor + "│────────────────│" + Misc.RESET, //4
       outlineColor + "│" + Misc.RESET + propertyLine + outlineColor + "│" + Misc.RESET, //5
       outlineColor + "│                │" + Misc.RESET, //6
       outlineColor + "│                │" + Misc.RESET, //7
       outlineColor + "│                │" + Misc.RESET, //8
       outlineColor + "└────────────────┘" + Misc.RESET //9
+    	 
+    		
+    	/**
+      outlineColor + "┌----------------┐" + Misc.RESET, //0
+      outlineColor + "|" + Misc.RESET + tileColor + colorLine + Misc.RESET + outlineColor + "|" + Misc.RESET, //1
+      outlineColor + "| " + Misc.RESET + Misc.BLACK + topLine + Misc.RESET + outlineColor + " |" + Misc.RESET, //2
+      outlineColor + "| " + Misc.RESET + Misc.BLACK + bottomLine + Misc.RESET + outlineColor + " |" + Misc.RESET, //3
+      outlineColor + "|────────────────|" + Misc.RESET, //4
+      outlineColor + "|" + Misc.RESET + propertyLine + outlineColor + "|" + Misc.RESET, //5
+      outlineColor + "|                |" + Misc.RESET, //6
+      outlineColor + "|                |" + Misc.RESET, //7
+      outlineColor + "|                |" + Misc.RESET, //8
+      outlineColor + "└----------------┘" + Misc.RESET //9
+      	*/
     }; 
+    
     return toReturn;
-	}
+  }
   
   /**
   returns visual representation of players currently visiting tile
