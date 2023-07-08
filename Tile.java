@@ -1,43 +1,57 @@
 import java.util.ArrayList;
 
+/**
+class representing tiles and their respective cards on the monopoly board
+*/
 public class Tile{
-  private int tileLocation;
+  //member vars
   private int price;
-  private int rent;
-  private int rentArr[];
-  private String innerText = "Cheese";
-  private String tileColor = "\033[0;37m";
-
-  //misc
-  final String RED = "\033[0;31m            ";     // RED
-  final String GREEN = "\033[0;32m            ";   // GREEN
-  final String RESET = "\033[0m";  
-  
-  boolean isMortgaged = false;
-  
-  private Player owner;
-
-  public static final String ANSI_RESET = "\033[0m";
-
-  //sets tile type
-  // 0 is property
-  // 1 is tax
-  // 2 is draw card
-  // 3 is jail
-  // 4 is collect (go and others)
-  // 5 is nothing (parking space, visiting jail)
+    //sets tile type
+      // 0 is property
+        //01 is a railroad
+        //02 is a utility
+      // 1 is tax
+      // 2 is draw card
+      // 3 is jail
+      // 4 is collect (go and others)
+      // 5 is nothing (parking space, visiting jail)
   private int type = 0;
-  
+    //int representing tile's position on the board
+  private int position;
+    //bool representing tile's mortgage status
+  private boolean isMortgaged = false;
+    //bool representing if a tile is part of a monopoly (every tile in that set is owned by one player)
+  private boolean isMonopoly = false;
+    //tile owner
+  private Player owner;
+    //tile rent list used for determining rent with certain property #
+  private int rentArr[];
+    //tile property lists
   private ArrayList<House> houseList = new ArrayList<House>();
   private ArrayList<Hotel> hotelList = new ArrayList<Hotel>();
+    //misc
+      //used for generating visual tile text
+  private String colorLine =  "                ";
+  private String topLine =    "              ";
+  private String bottomLine = "              ";
+      //used for visual tile color
+  private String tileColor = Misc.WHITE;
+  private String outlineColor = Misc.WHITE;
+
   
-  public Tile(int tileLocation){
-    this.tileLocation = tileLocation;
+  //constructor 
+  public Tile(int position){
+    this.position = position;
+    this.setTile();
   }
 
-  //mutators
-  public String getInnerText(){
-    return innerText;
+  
+  //getters&setters
+  public String getTopLine(){
+    return topLine;
+  }
+  public String getBottomLine(){
+    return bottomLine;
   }
   public String getTileColor(){
     return tileColor;
@@ -45,399 +59,548 @@ public class Tile{
   public Player getOwner(){
     return owner;
   }
+  public void setOwner(Player owner){
+    this.owner = owner;
+  }
   public int getPrice(){
     return price;
   }
-  public void setPrice(int price){
-    this.price = price;
+  public int getMortgage(){
+    return price/2;
+  }
+  public int getPosition(){
+    return position;
   }
   public int getType(){
     return type;
   }
+  public void addHouse(House toAdd){
+    houseList.add(toAdd);
+  }
+  public void addHotel(Hotel toAdd){
+    hotelList.add(toAdd);
+  }
   public boolean isMortgaged(){
     return isMortgaged;
   }
-  public void setTileLocation(int tileLocation){
-    this.tileLocation = tileLocation;
+  public int[] getRents(){
+    return rentArr;
   }
-  public int getTileLocation(){
-    return tileLocation;
-  }
-
-  public void purchase(Player buyer){
-    owner = buyer;
-    System.out.println(buyer.getIcon() + " has purchased " + innerText + " for " + price + " dollars");
-    buyer.minusMoney(price);
-    buyer.addProperty(this);
-  }
-  public void payRent(Player payer){
-    payer.minusMoney(this.getRent());
-  }
-  
-  public int getRent(){
-     if(innerText.contains("road") || innerText.contains("line")){
+    /**
+    returns tile rent based on tile type and tile property count
+    */
+  public int getRent(int... diceRoll){
+      //checks to see if tile is a utility in order to apply special rent properties 
+    if(diceRoll != null){
+      for(int roll: diceRoll){
+        int propertyCount = 0;
+        ArrayList<Tile> tileProperty = owner.getTilePropertyList();
+        for(int i = 0; i < tileProperty.size(); i++){
+          if(tileProperty.get(i).getType() == 02){
+            propertyCount += 1;
+          }
+      }
+        if(propertyCount == 1){
+          return(roll * 4);
+        }
+        else {
+          return(roll * 10);
+        }
+      }
+    }
+      //checks to see if tile is a railroad in order to apply special rent properties
+    if(type == 01){
       int propertyCount = 0;
       ArrayList<Tile> tileProperty = owner.getTilePropertyList();
       for(int i = 0; i < tileProperty.size(); i++){
-        if(tileProperty.get(i).innerText.contains("road") || innerText.contains("line")){
+        if(tileProperty.get(i).getType() == 01){
           propertyCount += 1;
         }
       }
       return 50 * propertyCount;
-    } else{
-    int rents[] = this.getRents();
+    } 
+      //if tile isn't a railroad or utility, sets rent based on tile property count and rentArr
+    else{
     if(hotelList.size() > 0){
-      return rents[5];
+      return rentArr[5];
     } else if(houseList.size() == 4){
-      return rents[4];
+      return rentArr[4];
     } else if(houseList.size() == 3){
-      return rents[3];
+      return rentArr[3];
     } else if(houseList.size() == 2){
-      return rents[2];
+      return rentArr[2];
     } else if(houseList.size() == 1){
-      return rents[1];
+      return rentArr[1];
     }
-    return rents[0];
+    return rentArr[0];
     }
   }
-
-  public int[] getRents(){
-    if(innerText.contains("road") || innerText.contains("line")){
-      rentArr = new int[]{50, 100, 150, 200};
-    }
-    return rentArr;
-  }
-  
-  public String[] getTile(){
-    switch (tileLocation) {
+    /**
+    sets all variables of a tile depending on its location on the board
+    */
+  public void setTile(){
+    switch (position) {
       case 0: 
-        innerText = "Go -----> Collect 200 ";
+        //ref        "              "
+        topLine =    " Go ----->    ";
+        bottomLine = " Collect $200 ";
         type = 4;
         break;
       case 1: 
-        innerText = "Mediterranean Avenue";
-        tileColor = "\033[38;2;135;82;62m";
+        //ref        "              "
+        topLine =    "Mediterranean ";
+        bottomLine = "    Avenue    ";
+        tileColor = Misc.BACKGROUND_BROWN;
         price = 60;
         rentArr = new int[]{2, 10, 30, 90, 160, 250}; 
         break;
       case 2: 
-        innerText = "Community Chest";
+        //ref        "              "
+        topLine =    "   Community  ";
+        bottomLine = "    Chest     ";
         type = 2;
         break;
       case 3: 
-        innerText = "Baltic Avenue";
-        tileColor = "\033[38;2;135;82;62m";
+        //ref        "              "
+        topLine =    "Baltic Avenue ";
+        tileColor = Misc.BACKGROUND_BROWN;
         price = 60;
         rentArr = new int[]{4, 20 ,60, 180, 320, 450};
         break;
       case 4: 
-        innerText = "Income Tax";
+        //ref        "              "
+        topLine   =  "  Income Tax  ";
         type = 1;
         break;
       case 5: 
-        innerText = "Reading Railroad";
+        //ref        "              "
+        colorLine = "    Reading     ";
+        topLine =    "   Railroad   ";
         price = 200;
+        rentArr = new int[]{50, 100, 150, 200};
+        type = 01;
         break;
       case 6: 
-        innerText = "Oriental Avenue";
-        tileColor = "\033[38;2;120;172;255m";
+        //ref        "              "
+        topLine =    "   Oriental   ";
+        bottomLine = "    Avenue    ";
+        tileColor = Misc.BACKGROUND_LIGHT_BLUE;
         price = 100;
         rentArr = new int[]{6, 30, 90, 270, 400, 550};
         break;
       case 7: 
-        innerText = "Chance";
+        //ref        "              "
+        colorLine = "     Chance     ";
+        topLine =    "      ?       ";
         type = 2;
         break;
       case 8: 
-        innerText = "Vermont Avenue";
-        tileColor = "\033[38;2;120;172;255m";
+        //ref        "              "
+        topLine =    "Vermont Avenue";
+        tileColor = Misc.BACKGROUND_LIGHT_BLUE;
         price = 100;
         rentArr = new int[]{6, 30, 90, 270, 400, 550};
         break;
       case 9: 
-        innerText = "Connecticut Avenue";
-        tileColor = "\033[38;2;120;172;255m";
+        //ref        "              "
+        topLine =    "  Connecticut ";
+        bottomLine = "    Avenue    ";
+        tileColor = Misc.BACKGROUND_LIGHT_BLUE;
         price = 120;
         rentArr = new int[]{8, 40, 100, 300, 450, 600};
         break;
       case 10: 
-        innerText = "Jail / Just Visiting";
+        //ref        "              "
+        topLine =    "    Jail /    ";
+        bottomLine = " Just Visiting";
         type = 5;
         break;
       case 11: 
-        innerText = "St. Charles Place";
-        tileColor = "\033[38;2;255;153;240m";
+        //ref        "              "
+        topLine =    "  St.Charles  ";
+        bottomLine = "    Place     ";
+        tileColor = Misc.BACKGROUND_LIGHT_PINK;
         price = 140;
         rentArr = new int[]{10, 50, 150, 450, 625, 750};
         break;
       case 12: 
-        innerText = "Electric Company";
+        //ref        "              "
+        colorLine = "    Electric    ";
+        topLine =    "   Company    ";
         price = 150;
+        type = 02;
         break;
       case 13: 
-        innerText = "States Avenue";
-        tileColor = "\033[38;2;255;153;240m";
+        //ref        "              "
+        topLine =    "States Avenue ";
+        tileColor = Misc.BACKGROUND_LIGHT_PINK;
         price = 140;
         rentArr = new int[]{10, 50, 150, 450, 625, 750};
         break;
       case 14: 
-        innerText = "Virginia Avenue";
-        tileColor = "\033[38;2;255;153;240m";
+        //ref        "              "
+        topLine =    "   Virginia   ";
+        bottomLine = "    Avenue    ";
+        tileColor = Misc.BACKGROUND_LIGHT_PINK;
         price = 160;
         rentArr = new int[]{12, 60, 180, 500, 700, 900};
         break;
       case 15: 
-        innerText = "Pennsylvania Railroad";
+        //ref        "              "
+        colorLine = "  Pennsylvania  ";
+        topLine =    "   Railroad   ";
         price = 200;
+        rentArr = new int[]{50, 100, 150, 200};
+        type = 01;
         break;
       case 16: 
-        innerText = "St. James Place";
-        tileColor = "\033[38;2;225;153;0m";
+        //ref        "              "
+        topLine =    "St.James Place";
+        tileColor = Misc.BACKGROUND_ORANGE;
         price = 180;
         rentArr = new int[]{14, 70, 200, 550, 750, 950};
         break;
       case 17: 
-        innerText = "Community Chest";
+        //ref        "              "
+        topLine =    "  Community   ";
+        bottomLine = "    Chest     ";
         type = 2;
         break;
       case 18: 
-        innerText = "Tennessee Avenue";
-        tileColor = "\033[38;2;225;153;0m";
+        //ref        "              "
+        topLine =    "   Tennessee  ";
+        bottomLine = "    Avenue    ";
+        tileColor = Misc.BACKGROUND_ORANGE;
         price = 180;
         rentArr = new int[]{14, 70, 200, 550, 750, 950};
         break;
       case 19: 
-        innerText = "New York Avenue";
-        tileColor = "\033[38;2;225;153;0m";
+        //ref        "              "
+        topLine =    "   New York   ";
+        bottomLine = "    Avenue    ";
+        tileColor = Misc.BACKGROUND_ORANGE;
         price = 200;
         rentArr = new int[]{16, 80, 220, 600, 800, 1000};
         break;
       case 20: 
-        innerText = "Free Parking";
+        //ref        "              "
+        topLine =    " Free Parking ";
         type = 5;
         break;
       case 21: 
-        innerText = "Kentucky Avenue";
-        tileColor = "\033[0;31m";
+        //ref        "              "
+        topLine =    "   Kentucky   ";
+        bottomLine = "    Avenue    ";
+        tileColor = Misc.BACKGROUND_RED;
         price = 220;
         rentArr = new int[]{18, 90, 250, 700, 875, 1050};
         break;
       case 22: 
-        innerText = "Chance";
+        //ref        "              "
+        colorLine = "     Chance     ";
+        topLine =    "      ?       ";
         type = 2;
         break;
       case 23: 
-        innerText = "Indiana Avenue";
-        tileColor = "\033[0;31m";
+        //ref        "              "
+        topLine =    "Indiana Avenue";
+        tileColor = Misc.BACKGROUND_RED;
         price = 220;
         rentArr = new int[]{18, 90, 250, 700, 875, 1050};
         break;
       case 24: 
-        innerText = "Illinois Avenue";
-        tileColor = "\033[0;31m";
+        //ref        "              "
+        topLine =    "   Illinois   ";
+        bottomLine = "    Avenue    ";
+        tileColor = Misc.BACKGROUND_RED;
         price = 240;
         rentArr = new int[]{20, 100, 300, 750, 925, 1100};
         break;
       case 25: 
-        innerText = "B. & O. Railroad";
+        //ref        "              "
+        topLine =    "B.&.O Railroad";
         price = 200;
+        rentArr = new int[]{50, 100, 150, 200};
+        type= 01;
         break;
       case 26: 
-        innerText = "Atlantic Avenue";
-        tileColor = "\033[0;33m";
+        //ref        "              "
+        topLine =    "   Atlantic   ";
+        bottomLine = "    Avenue    ";
+        tileColor = Misc.BACKGROUND_YELLOW;
         price = 260;
         rentArr = new int[]{22, 110, 330, 800, 975, 1150};
         break;
       case 27: 
-        innerText = "Ventnor Avenue";
-        tileColor = "\033[0;33m";
+        //ref        "              "
+        topLine =    "Ventnor Avenue";
+        tileColor = Misc.BACKGROUND_YELLOW;
         price = 260;
         rentArr = new int[]{22, 110, 330, 800, 975, 1150};
         break;
       case 28: 
-        innerText = "Water Works";
+        //ref        "              "
+        colorLine = "  Water Works   ";
         price = 150;
+        type = 02;
         break;
       case 29: 
-        innerText = "Marvin Gardens";
-        tileColor = "\033[0;33m";
+        //ref        "              "
+        topLine =    "Marvin Gardens";
+        tileColor = Misc.BACKGROUND_YELLOW;
         price = 280;
         rentArr = new int[]{24, 120, 360, 850, 1025, 1200};
         break;
       case 30: 
-        innerText = "Go To Jail";
+        //ref        "              "
+        topLine =    "  Go To Jail  ";
         type = 3;
         break;
       case 31: 
-        innerText = "Pacific Avenue";
-        tileColor = "\033[38;2;62;135;81m";
+        //ref        "              "
+        topLine =    "Pacific Avenue";
+        tileColor = Misc.BACKGROUND_FOREST_GREEN;
         price = 300;
         rentArr = new int[]{26, 130, 390, 900, 100, 1275};
         break;
       case 32: 
-        innerText = "North Carolina Avenue";
-        tileColor = "\033[38;2;62;135;81m";
+        //ref        "              "
+        topLine =    "North Carolina";
+        bottomLine = "    Avenue    ";
+        tileColor = Misc.BACKGROUND_FOREST_GREEN;
         price = 300;
         rentArr = new int[]{26, 130, 390, 900, 100, 1275};
         break;
       case 33: 
-        innerText = "Community Chest";
+        //ref        "              "
+        topLine =    "  Community   ";
+        bottomLine = "    Chest     ";
         type = 2;
         break;
       case 34: 
-        innerText = "Pennsylvania Avenue";
-        tileColor = "\033[38;2;62;135;81m";
+        //ref        "              "
+        topLine =    " Pennsylvania ";
+        bottomLine = "    Avenue    ";
+        tileColor = Misc.BACKGROUND_FOREST_GREEN;
         price = 320;
         rentArr = new int[]{28, 150, 450, 1000, 1200, 1400};
         break;
       case 35: 
-        innerText = "Short Line";
+        //ref        "              "
+        topLine =    "  Short Line  ";
         price = 200;
+        rentArr = new int[]{50, 100, 150, 200};
+        type = 01;
         break;
       case 36: 
-        innerText = "Chance";
+        //ref        "              "
+        colorLine = "     Chance     ";
+        topLine =    "      ?       ";
         type = 2;
         break;
       case 37: 
-        innerText = "Park Place";
-        tileColor = "\033[38;2;72;0;255m";
+        //ref        "              "
+        topLine =    "  Park Place  ";
+        tileColor = Misc.BACKGROUND_DARK_BLUE;
         price = 350;
         rentArr = new int[]{35, 175, 500, 1100, 1300, 1500};
         break;
       case 38: 
-        innerText = "Luxury Tax";
+        //ref        "              "
+        topLine =    "  Luxury Tax  ";
         type = 1;
         break;
       case 39: 
-        innerText = "Boardwalk";
-        tileColor = "\033[38;2;72;0;255m";
+        //ref        "              "
+        topLine =    "  Boardwalk   ";
+        tileColor = Misc.BACKGROUND_DARK_BLUE;
         price = 400;
         rentArr = new int[]{50, 200, 600, 1400, 1700, 2000};
         break;
     }
-    
-    //sets lines for formatting
-    int spaceCount = 0;
-    for(int i = 0; i < innerText.length(); i++){
-      if(innerText.charAt(i) == ' '){
-        spaceCount++;
-      }
-    }
-    String topLine;
-    String midLine;
-    String bottomLine = "";
-    if(spaceCount < 1){
-      topLine = innerText.substring(0, innerText.length());
-      midLine = "";
-    } else if(spaceCount > 1){
-      topLine = innerText.substring(0, innerText.indexOf(" "));
-      midLine = innerText.substring(innerText.indexOf(" ") + 1, innerText.lastIndexOf(" "));
-      bottomLine = innerText.substring(innerText.lastIndexOf(" ") + 1, innerText.length());
-    } else {
-      topLine = innerText.substring(0, innerText.indexOf(" "));
-     midLine = innerText.substring(innerText.indexOf(" ") + 1, innerText.length());
-    }
-    String topLineSpace = Tile.spacer(topLine);
-    String midLineSpace = Tile.spacer(midLine);
-    String bottomLineSpace = Tile.spacer(bottomLine);
-    
-    //returns formatted tile
-    String[] toReturn = new String[]{
-      "┌────────────────┐", //0
-      "│ " + tileColor + topLine + topLineSpace + ANSI_RESET + " │", //1
-      "│ " + tileColor + midLine + midLineSpace + ANSI_RESET + " │", //2
-      "│ " + tileColor + bottomLine + bottomLineSpace + ANSI_RESET + " │", //3
-      "│────────────────│", //4
-      "│                │", //5
-      "│                │", //6
-      "└────────────────┘"}; //7
+  }
+    /**
+    returns card/board version of tile in a string array
+    */
+  public String[] getTile(){
+    //lines representing hotels/houses
+    String oneLine =   "       " + Misc.GREEN + "[]" + Misc.RESET + "       ";
+    String twoLine =   "    " + Misc.GREEN + "[]    []" + Misc.RESET + "    ";
+    String threeLine = "   " + Misc.GREEN + "[]  []  []" + Misc.RESET + "   ";
+    String fourLine =  " " + Misc.GREEN + "[]  []  []  []" + Misc.RESET + " ";
+    String hotelLine = "       " + Misc.RED + "[]" + Misc.RESET + "       ";
 
-    String oneLine = "│       " + GREEN + "──" + RESET + "       │";
-    String twoLine =  "│    " + GREEN + "──    ──" + RESET + "    │";
-    String threeLine = "│   " + GREEN + "──  ──  ──" + RESET + "   │";
-
-    String hotelLine = "│       " + GREEN + "──" + RESET + "       │";
-
+    //places hotels/houses in line to be inserted in tile
+      //line to be inserted
+    String propertyLine = "                ";
     if(hotelList.size() > 0){
-      toReturn[5] = hotelLine;
+      propertyLine = hotelLine;
     } else if(houseList.size() == 1){
-      toReturn[5] = oneLine;
+      propertyLine = oneLine;
     } else if(houseList.size() == 2){
-      toReturn[5] = twoLine;
+      propertyLine = twoLine;
     } else if(houseList.size() == 3){
-      toReturn[5] = threeLine;
+      propertyLine = threeLine;
     } else if(houseList.size() == 4){
-      toReturn[5] = twoLine;
-      toReturn[6] = twoLine;
-    } else if(houseList.size() == 5){
-      toReturn[5] = threeLine;
-      toReturn[6] = twoLine;
-    } else if(houseList.size() == 6){
-      toReturn[5] = threeLine;
-      toReturn[6] = threeLine;
-    }
+      propertyLine = fourLine;
+    } 
+
+    String[] toReturn = new String[]
+    {
+      outlineColor + "┌────────────────┐" + Misc.RESET, //0
+      outlineColor + "│" + Misc.RESET + tileColor + colorLine + Misc.RESET + outlineColor + "│" + Misc.RESET, //1
+      outlineColor + "│ " + Misc.RESET + Misc.WHITE + topLine + Misc.RESET + outlineColor + " │" + Misc.RESET, //2
+      outlineColor + "│ " + Misc.RESET + Misc.WHITE + bottomLine + Misc.RESET + outlineColor + " │" + Misc.RESET, //3
+      outlineColor + "│────────────────│" + Misc.RESET, //4
+      outlineColor + "│" + Misc.RESET + propertyLine + outlineColor + "│" + Misc.RESET, //5
+      outlineColor + "│                │" + Misc.RESET, //6
+      outlineColor + "│                │" + Misc.RESET, //7
+      outlineColor + "│                │" + Misc.RESET, //8
+      outlineColor + "└────────────────┘" + Misc.RESET //9
+    }; 
     return toReturn;
 	}
+  
+  /**
+  returns visual representation of players currently visiting tile
+  */
+  public String[] getTileIcons(Player currentPlayer) {
+    // list of all players
+    ArrayList<Player> playerList = Board.getPlayerListCopy();
+    // list of strings to be returned
+    String[] toReturn = new String[9];
 
-  public static String spacer(String str){
-    int l = 14 - str.length();
-    String spaces = "";
-    for(int i = 0; i < l; i++){
-      spaces += " ";
+    //fills toReturn with empty strings to avoid null calls 
+    for(int i = 0; i < toReturn.length; i++){
+      toReturn[i] = "";
     }
-    return spaces;
-  }
 
+    // removes currentPlayer and players whose positions aren't on the tile from playerList
+    for (int i = 0; i < playerList.size(); i++) {
+      Player player = playerList.get(i);
+      // checks for currentPlayer
+      if (player == currentPlayer) {
+        playerList.remove(i);
+        i--;
+      }
+      // checks for players not actually on tile
+      else if(player.getPosition() != this.position) {
+        playerList.remove(i);
+        i--;
+      }
+    }
+
+    // starting index in playerList for lineIndex loop
+    int addIndex = 0;
+    for (int playerIndex = 0; playerIndex < playerList.size(); playerIndex++) {
+      Player player = playerList.get(playerIndex);
+      String[] icon = player.getIcon();
+
+      // adds every line of icon to toReturn
+      for(int lineIndex = addIndex; lineIndex < addIndex + 3; lineIndex++) {
+        // before/after spaces content
+        String spacesToAdd = "   ";
+
+        // adds before space to icon if icon is first in it's row
+        if (playerIndex == 0 || playerIndex == 3 || playerIndex == 6) {
+          toReturn[lineIndex] += spacesToAdd;
+          
+          // adds extra space if icon is in the last row
+          if (playerIndex == 6) {
+            toReturn[lineIndex] += spacesToAdd;
+            toReturn[lineIndex] += " ";
+          }
+        }
+
+        // adds tile content to toReturn at lineIndex (get, set, add)
+        toReturn[lineIndex] += icon[lineIndex - addIndex] + " ";
+
+        // adds after space to icon if icon is last in its row
+        // adds to addIndex if icon is last in its row, and lineIndex is on the last line
+        if (playerIndex == 2 || playerIndex == 5 || playerIndex == 6) {
+          toReturn[lineIndex] += spacesToAdd;
+          // adds extra space if icon is in the last row
+          if (playerIndex == 6) {
+            toReturn[lineIndex] += spacesToAdd;
+          }
+          // adds to addIndex if icon is last in it's row, and lineIndex is on the last line
+          if (lineIndex == 2 || lineIndex == 5) {
+            addIndex += 3;
+            break;
+          }
+        }
+        // checks for icons that are last in their row but their row isn't full
+        else if(playerList.size() == playerIndex + 1) {
+          // addds two spaces by default (one icon is missing from row)
+          toReturn[lineIndex] += spacesToAdd;
+          toReturn[lineIndex] += spacesToAdd;
+          toReturn[lineIndex] += " ";
+          // adds extra space if two icons are missing from row
+          if (playerIndex == 0 || playerIndex == 3) {
+            toReturn[lineIndex] += spacesToAdd;
+            toReturn[lineIndex] += " ";
+          }
+        }
+      }
+    }
+    //checks for empty lines and fills them with spaces
+    for(int line = 0; line < toReturn.length; line++){
+      if(toReturn[line].isEmpty()){
+        toReturn[line] = "                  ";
+      }
+    }
+    return toReturn;
+  }
+  
+  /**
+  prints visual tile
+  */
+  public void printTile(){
+    String [] tile = this.getTile();
+    for(String toPrint: tile){
+      System.out.println(toPrint);
+    }
+  }
+  
+  /**
+  prints tile details
+  */
   public void printTileDetails(){
     int rentList[] = this.getRents();
     System.out.println(" - Tile Price " + price);
-    if(innerText.contains("Electric") || innerText.contains("Water")){
-      System.out.println(" - Rent is 4 Times the Dice Roll that Landed the Player there");
-    } else if(innerText.contains("road") || innerText.contains("Line")){
+    if(type == 02){
+      System.out.println(" - With One Utility Owned, Rent is 4 Times Dice Roll");
+      System.out.println(" - With Two Utilities Owned, Rent is 10 Times Dice Roll");
+    } else if(type == 01){
       System.out.println(" - Rent with One Railroad: " + rentList[0]);
       System.out.println(" - Rent with Two Railroads: " + rentList[1]);
       System.out.println(" - Rent with Three Railroads: " + rentList[2]);
       System.out.println(" - Rent with Four Railroads: " + rentList[3]);
     } else {
       for(int i = 0; i < 6; i++){
-        String s = "";
+        String toPrint = "";
         switch(i){
           case 0:
-            s = " - Base Rent with No Properties: ";
+            toPrint = " - Base Rent with No Properties: ";
             break;
           case 1:
-            s = " - Rent with One House: ";
+            toPrint = " - Rent with One House: ";
             break;
           case 2:
-            s = " - Rent with Two Homes: ";
+            toPrint = " - Rent with Two Homes: ";
             break;
           case 3:
-            s = " - Rent with Three Homes: ";
+            toPrint = " - Rent with Three Homes: ";
             break;
           case 4:
-            s = " - Rent with Four Homes ";
+            toPrint = " - Rent with Four Homes ";
             break;
           case 5:
-            s = " - Rent with Hotel: ";
+            toPrint = " - Rent with Hotel: ";
             break;
         }
-        System.out.println(s + rentList[i]);
+        System.out.println(toPrint + rentArr[i]);
       }
     }
   }
-
-  // public static String fixString(String str){
-  //   return str.replaceAll("", "");
-  //   //return str;
-  //   //str.replaceAll(" ", "");
-  //   //"(\\x9B|\\x1B\\[)[0-?]*[ -\\/]*[@-~]"
-  // }
-
-  // public static String[] fixStringArr(String[] arr){
-
-  // }   
 }
-
-
-
-

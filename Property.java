@@ -1,12 +1,25 @@
+/**
+Superclass representing property
+*/
 public class Property{
-  private Tile tile;
+  //member variables
+  private Tile parentTile;
   private Player owner;
-  
 
+
+  //constructor
   public Property(Tile tile, Player owner){
-    this.tile = tile;
+    parentTile = tile;
     this.owner = owner;
   }
 
+  
+  //getters&setters
+  public Tile getParentTile(){
+    return parentTile;
+  }
+  public Player getOwner(){
+    return owner;
+  }
   
 }
